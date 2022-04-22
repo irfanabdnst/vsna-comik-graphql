@@ -11,7 +11,7 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   email     String   @unique
@@ -22,7 +22,7 @@ model User {
 }
 
 model Comic {
-  id            String    @id @default(uuid())
+  id            Int       @id @default(autoincrement())
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   title         String
@@ -37,30 +37,33 @@ model Comic {
 }
 
 model Chapter {
-  id            String   @id @default(uuid())
+  id            Int      @id @default(autoincrement())
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   chapterNumber String
   title         String?
   published     Boolean  @default(false)
-  comicId       String
+  comicId       Int
   comic         Comic    @relation(fields: [comicId], references: [id])
   images        Image[]
 }
 
 model Image {
-  id         String   @id @default(uuid())
+  id         Int      @id @default(autoincrement())
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   pageNumber Int
   imageUrl   String
-  chapterId  String
+  chapterId  Int
   chapter    Chapter  @relation(fields: [chapterId], references: [id])
 }
 
 model Tag {
-  name   String  @id
-  comics Comic[]
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String   @unique
+  comics    Comic[]
 }
 
 enum Role {
