@@ -59,8 +59,11 @@ model Image {
 }
 
 model Tag {
-  name   String  @id
-  comics Comic[]
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String   @unique
+  comics    Comic[]
 }
 
 enum Role {

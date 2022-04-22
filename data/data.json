@@ -1,0 +1,36 @@
+{
+    "user": {
+        "email": "vesnanst@gmail.com",
+        "username": "vesnanst",
+        "password": "123456",
+        "role": "ADMIN"
+    },
+    "comic": {
+        "title": "Bowblade Spirit",
+        "description": "The bow is a weapon that dominates everything in sight, even for targets hiding at distances too far for the eyes to see. Just imagine a weapon you cannot even see targeting your life. What could possibly be scarier than that? A training regime from hell with a brutal grandfather. A joyful trip to Zhongyuan in search of a wife. The rise of a hero who will overturn the Murim world. Ki Guided Arrow - a fresh take on Ki Guidance that is stronger than both the Ki Guided Sword and Blade! Fire the arrow into tomorrow!",
+        "author": "Cho Don Hyeong",
+        "coverImageUrl": "https://thumbnail.komiku.id/wp-content/uploads/2020/11/Komik-Bowblade-Spirit.jpg?w=225&quality=60"
+    },
+    "chapter": {
+        "chapterNumber": "1",
+        "title": "Ki Guided Arrow"
+    },
+    "image": [
+        {
+            "pageNumber": 1,
+            "imageUrl": "https://v19.mkklcdnv6tempv5.com/img/tab_19/03/55/67/jp986924/chapter_1_ki_guided_arrow/1-n.jpg"
+        },
+        {
+            "pageNumber": 2,
+            "imageUrl": "https://v19.mkklcdnv6tempv5.com/img/tab_19/03/55/67/jp986924/chapter_1_ki_guided_arrow/2-n.jpg"
+        },
+        {
+            "pageNumber": 3,
+            "imageUrl": "https://v19.mkklcdnv6tempv5.com/img/tab_19/03/55/67/jp986924/chapter_1_ki_guided_arrow/3-n.jpg"
+        },
+        {
+            "pageNumber": 4,
+            "imageUrl": "https://v19.mkklcdnv6tempv5.com/img/tab_19/03/55/67/jp986924/chapter_1_ki_guided_arrow/4-n.jpg"
+        }
+    ]
+}
