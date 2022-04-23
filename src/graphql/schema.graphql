@@ -2,6 +2,67 @@
 ### Do not make changes to this file directly
 
 
+type Chapter {
+  chapterNumber: String!
+  comic: Comic
+  createdAt: DateTime!
+  id: Int!
+  published: Boolean!
+  title: String
+  updatedAt: DateTime!
+}
+
+type Comic {
+  author: String
+  coverImageUrl: String
+  createdAt: DateTime!
+  description: String
+  id: Int!
+  published: Boolean!
+  releaseDate: DateTime
+  tags: [Tag]
+  title: String!
+  updatedAt: DateTime!
+  users: [User]
+}
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar DateTime
+
+type Image {
+  chapter: Chapter
+  createdAt: DateTime!
+  id: Int!
+  imageUrl: String!
+  pageNumber: Int!
+  updatedAt: DateTime!
+}
+
 type Query {
   ok: Boolean!
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+type Tag {
+  comics: [Comic]
+  createdAt: DateTime!
+  id: Int!
+  name: String!
+  updatedAt: DateTime!
+}
+
+type User {
+  bookmarks: [Comic]
+  createdAt: DateTime!
+  email: String!
+  id: Int!
+  role: Role!
+  updatedAt: DateTime!
+  username: String!
 }
