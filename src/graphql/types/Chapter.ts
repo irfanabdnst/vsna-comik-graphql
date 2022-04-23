@@ -1,4 +1,4 @@
-import { objectType } from 'nexus';
+import { extendType, intArg, nonNull, objectType } from 'nexus';
 
 export const Chapter = objectType({
     name: 'Chapter',
@@ -17,6 +17,28 @@ export const Chapter = objectType({
                         where: { id },
                     })
                     .comic();
+            },
+        });
+    },
+});
+
+export const ChapterQuery = extendType({
+    type: 'Query',
+    definition(t) {
+        t.nonNull.list.field('chapters', {
+            type: 'Chapter',
+            async resolve(_parent, _args, { prisma }) {
+                return await prisma.chapter.findMany({
+                    orderBy: { createdAt: 'desc' },
+                });
+            },
+        });
+
+        t.field('chapter', {
+            type: 'Chapter',
+            args: { id: nonNull(intArg()) },
+            async resolve(_parent, { id }, { prisma }) {
+                return await prisma.chapter.findUnique({ where: { id } });
             },
         });
     },

@@ -1,4 +1,4 @@
-import { objectType } from 'nexus';
+import { extendType, intArg, nonNull, objectType } from 'nexus';
 
 export const Comic = objectType({
     name: 'Comic',
@@ -30,6 +30,28 @@ export const Comic = objectType({
                         where: { id },
                     })
                     .users();
+            },
+        });
+    },
+});
+
+export const ComicQuery = extendType({
+    type: 'Query',
+    definition(t) {
+        t.nonNull.list.field('comics', {
+            type: 'Comic',
+            async resolve(_parent, _args, { prisma }) {
+                return await prisma.comic.findMany({
+                    orderBy: { createdAt: 'desc' },
+                });
+            },
+        });
+
+        t.field('comic', {
+            type: 'Comic',
+            args: { id: nonNull(intArg()) },
+            async resolve(_parent, { id }, { prisma }) {
+                return await prisma.comic.findUnique({ where: { id } });
             },
         });
     },

@@ -1,4 +1,4 @@
-import { enumType, objectType } from 'nexus';
+import { enumType, extendType, intArg, nonNull, objectType } from 'nexus';
 export const User = objectType({
     name: 'User',
     definition(t) {
@@ -24,4 +24,26 @@ export const User = objectType({
 export const Role = enumType({
     name: 'Role',
     members: ['ADMIN', 'USER'],
+});
+
+export const UserQuery = extendType({
+    type: 'Query',
+    definition(t) {
+        t.nonNull.list.field('users', {
+            type: 'User',
+            async resolve(_parent, _args, { prisma }) {
+                return await prisma.user.findMany({
+                    orderBy: { createdAt: 'asc' },
+                });
+            },
+        });
+
+        t.field('user', {
+            type: 'User',
+            args: { id: nonNull(intArg()) },
+            async resolve(_parent, { id }, { prisma }) {
+                return await prisma.user.findUnique({ where: { id } });
+            },
+        });
+    },
 });

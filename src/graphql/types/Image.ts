@@ -1,4 +1,4 @@
-import { objectType } from 'nexus';
+import { extendType, intArg, nonNull, objectType } from 'nexus';
 
 export const Image = objectType({
     name: 'Image',
@@ -16,6 +16,19 @@ export const Image = objectType({
                         where: { id },
                     })
                     .chapter();
+            },
+        });
+    },
+});
+
+export const ImageQuery = extendType({
+    type: 'Query',
+    definition(t) {
+        t.nonNull.list.field('images', {
+            type: 'Image',
+            args: { chapterId: nonNull(intArg()) },
+            async resolve(_parent, { chapterId }, { prisma }) {
+                return await prisma.image.findMany({ where: { chapterId } });
             },
         });
     },

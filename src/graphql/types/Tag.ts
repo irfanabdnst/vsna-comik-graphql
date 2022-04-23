@@ -1,4 +1,4 @@
-import { objectType } from 'nexus';
+import { extendType, intArg, nonNull, objectType } from 'nexus';
 
 export const Tag = objectType({
     name: 'Tag',
@@ -15,6 +15,27 @@ export const Tag = objectType({
                         where: { id },
                     })
                     .comics();
+            },
+        });
+    },
+});
+
+export const TagQuery = extendType({
+    type: 'Query',
+    definition(t) {
+        t.nonNull.list.field('tags', {
+            type: 'Tag',
+            async resolve(_parent, _args, { prisma }) {
+                return await prisma.tag.findMany({
+                    orderBy: { name: 'asc' },
+                });
+            },
+        });
+        t.field('tag', {
+            type: 'Tag',
+            args: { id: nonNull(intArg()) },
+            async resolve(_parent, { id }, { prisma }) {
+                return await prisma.tag.findUnique({ where: { id } });
             },
         });
     },

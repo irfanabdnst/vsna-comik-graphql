@@ -41,7 +41,15 @@ type Image {
 }
 
 type Query {
-  ok: Boolean!
+  chapter(id: Int!): Chapter
+  chapters: [Chapter]!
+  comic(id: Int!): Comic
+  comics: [Comic]!
+  images(chapterId: Int!): [Image]!
+  tag(id: Int!): Tag
+  tags: [Tag]!
+  user(id: Int!): User
+  users: [User]!
 }
 
 enum Role {
