@@ -17,45 +17,46 @@ model User {
   email     String   @unique
   username  String   @unique
   password  String
-  role      Role
+  role      Role     @default(USER)
   bookmarks Comic[]
 }
 
 model Comic {
-  id            Int       @id @default(autoincrement())
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  title         String
-  description   String?
-  releaseDate   DateTime?
-  author        String?
-  published     Boolean   @default(false)
-  coverImageUrl String?
-  tags          Tag[]
-  chapters      Chapter[]
-  users         User[]
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  title     String
+  published Boolean   @default(false)
+  status    Status    @default(READING)
+  source    Source[]
+  tags      Tag[]
+  chapters  Chapter[]
+  users     User[]
 }
 
 model Chapter {
-  id            Int      @id @default(autoincrement())
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id            Int       @id @default(autoincrement())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
   chapterNumber String
   title         String?
-  published     Boolean  @default(false)
+  releaseDate   DateTime?
+  published     Boolean   @default(false)
   comicId       Int
-  comic         Comic    @relation(fields: [comicId], references: [id])
-  images        Image[]
+  comic         Comic     @relation(fields: [comicId], references: [id])
+  sourceId      Int
+  source        Source    @relation(fields: [sourceId], references: [id])
 }
 
-model Image {
-  id         Int      @id @default(autoincrement())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  pageNumber Int
-  imageUrl   String
-  chapterId  Int
-  chapter    Chapter  @relation(fields: [chapterId], references: [id])
+model Source {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  name        String
+  homepageUrl String
+  imageUrl    String
+  comic       Comic[]
+  chapter     Chapter[]
 }
 
 model Tag {
@@ -69,4 +70,12 @@ model Tag {
 enum Role {
   ADMIN
   USER
+}
+
+enum Status {
+  READING
+  ON_HOLD
+  PLAN_TO_READ
+  COMPLETED
+  DROPPED
 }
