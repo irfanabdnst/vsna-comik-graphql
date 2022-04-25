@@ -26,6 +26,33 @@ type Comic {
   users: [User]
 }
 
+input CreateChapterInput {
+  chapterNumber: String!
+  published: Boolean
+  title: String
+}
+
+input CreateComicInput {
+  author: String
+  coverImageUrl: String
+  description: String
+  published: Boolean = false
+  releaseDate: DateTime
+  tagId: [Int]
+  title: String!
+}
+
+input CreateImageInput {
+  imageUrl: String!
+  pageNumber: Int!
+}
+
+input CreateUserInput {
+  email: String!
+  password: String!
+  username: String!
+}
+
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
@@ -38,6 +65,23 @@ type Image {
   imageUrl: String!
   pageNumber: Int!
   updatedAt: DateTime!
+}
+
+type Mutation {
+  createChapter(comicId: Int!, data: CreateChapterInput!): Chapter!
+  createComic(data: CreateComicInput!): Comic!
+  createImage(chapterId: Int!, data: CreateImageInput!): Image!
+  createTag(name: String!): Tag!
+  createUser(data: CreateUserInput!): User!
+  deleteChapter(id: Int!): Chapter!
+  deleteComic(id: Int!): Comic!
+  deleteImage(id: Int!): Image!
+  deleteTag(id: Int!): Tag!
+  deleteUser(id: Int!): User!
+  updateChapter(data: UpdateChapterInput!, id: Int!): Chapter!
+  updateChapterComic(chapterId: Int!, comicId: Int!): Chapter!
+  updateComic(data: UpdateComicInput!, id: Int!): Comic!
+  updateComicTag(comicId: Int!, tagId: [Int]!): Comic!
 }
 
 type Query {
@@ -63,6 +107,21 @@ type Tag {
   id: Int!
   name: String!
   updatedAt: DateTime!
+}
+
+input UpdateChapterInput {
+  chapterNumber: String
+  published: Boolean
+  title: String
+}
+
+input UpdateComicInput {
+  author: String
+  coverImageUrl: String
+  description: String
+  published: Boolean = false
+  releaseDate: DateTime
+  title: String
 }
 
 type User {

@@ -1,4 +1,4 @@
-import { extendType, intArg, nonNull, objectType } from 'nexus';
+import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
 
 export const Tag = objectType({
     name: 'Tag',
@@ -9,7 +9,7 @@ export const Tag = objectType({
         t.nonNull.string('name');
         t.list.field('comics', {
             type: 'Comic',
-            async resolve({ id }, _args, { prisma }) {
+            resolve: async ({ id }, _args, { prisma }) => {
                 return await prisma.tag
                     .findUnique({
                         where: { id },
@@ -25,7 +25,7 @@ export const TagQuery = extendType({
     definition(t) {
         t.nonNull.list.field('tags', {
             type: 'Tag',
-            async resolve(_parent, _args, { prisma }) {
+            resolve: async (_parent, _args, { prisma }) => {
                 return await prisma.tag.findMany({
                     orderBy: { name: 'asc' },
                 });
@@ -34,8 +34,29 @@ export const TagQuery = extendType({
         t.field('tag', {
             type: 'Tag',
             args: { id: nonNull(intArg()) },
-            async resolve(_parent, { id }, { prisma }) {
+            resolve: async (_parent, { id }, { prisma }) => {
                 return await prisma.tag.findUnique({ where: { id } });
+            },
+        });
+    },
+});
+
+export const TagMutation = extendType({
+    type: 'Mutation',
+    definition(t) {
+        t.nonNull.field('createTag', {
+            type: 'Tag',
+            args: { name: nonNull(stringArg()) },
+            resolve: async (_parent, { name }, { prisma }) => {
+                return await prisma.tag.create({ data: { name } });
+            },
+        });
+
+        t.nonNull.field('deleteTag', {
+            type: 'Tag',
+            args: { id: nonNull(intArg()) },
+            resolve: async (_parent, { id }, { prisma }) => {
+                return await prisma.tag.delete({ where: { id } });
             },
         });
     },
