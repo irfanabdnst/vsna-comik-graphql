@@ -6,65 +6,44 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   email     String   @unique
   username  String   @unique
   password  String
   role      Role     @default(USER)
-  bookmarks Comic[]
+  comicIDs  String[] @db.ObjectId
+  bookmarks Comic[]  @relation(fields: [comicIDs], references: [id])
 }
 
 model Comic {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id        String   @id @default(uuid()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   title     String
-  published Boolean   @default(false)
-  status    Status    @default(READING)
-  source    Source[]
-  tags      Tag[]
-  chapters  Chapter[]
-  users     User[]
-}
-
-model Chapter {
-  id            Int       @id @default(autoincrement())
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  chapterNumber String
-  title         String?
-  releaseDate   DateTime?
-  published     Boolean   @default(false)
-  comicId       Int
-  comic         Comic     @relation(fields: [comicId], references: [id])
-  sourceId      Int
-  source        Source    @relation(fields: [sourceId], references: [id])
+  published Boolean  @default(false)
+  status    Status   @default(READING)
+  userIDs   String[] @db.ObjectId
+  sourceIDs String[] @db.ObjectId
+  users     User[]   @relation(fields: [userIDs], references: [id])
+  sources   Source[] @relation(fields: [sourceIDs], references: [id])
 }
 
 model Source {
-  id          Int       @id @default(autoincrement())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id          String   @id @default(uuid()) @map("_id") @db.ObjectId
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   name        String
   homepageUrl String
   imageUrl    String
-  comic       Comic[]
-  chapter     Chapter[]
-}
-
-model Tag {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String   @unique
-  comics    Comic[]
+  comicIDs    String[] @db.ObjectId
+  comics      Comic[]  @relation(fields: [comicIDs], references: [id])
 }
 
 enum Role {
