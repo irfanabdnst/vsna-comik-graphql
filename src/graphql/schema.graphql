@@ -5,12 +5,19 @@
 type Comic {
   createdAt: DateTime!
   id: String!
-  published: Boolean!
+  published: Boolean
   sources: [Source]!
-  status: Status!
+  status: Status
   title: String!
   updatedAt: DateTime!
   users: [User]!
+}
+
+input ComicCreateInput {
+  published: Boolean
+  sourceId: String
+  status: Status
+  title: String!
 }
 
 """
@@ -18,8 +25,15 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
+type Mutation {
+  createComic(data: ComicCreateInput!): Comic!
+  createSource(data: SourceCreateInput!): Source!
+}
+
 type Query {
-  ok: Boolean!
+  comics: [Comic]!
+  sources: [Source]!
+  users: [User]!
 }
 
 enum Role {
@@ -30,11 +44,18 @@ enum Role {
 type Source {
   comics: [Comic]!
   createdAt: DateTime!
-  homepageUrl: String!
+  homepageUrl: String
   id: String!
-  imageUrl: String!
+  imageUrl: String
   name: String!
   updatedAt: DateTime!
+}
+
+input SourceCreateInput {
+  comicId: String
+  homepageUrl: String
+  imageUrl: String
+  name: String!
 }
 
 enum Status {
@@ -50,7 +71,7 @@ type User {
   createdAt: DateTime!
   email: String!
   id: String!
-  role: Role!
+  role: Role
   updatedAt: DateTime!
   username: String!
 }

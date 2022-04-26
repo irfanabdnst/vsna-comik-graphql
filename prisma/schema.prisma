@@ -11,24 +11,24 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid()) @map("_id") @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   email     String   @unique
   username  String   @unique
   password  String
-  role      Role     @default(USER)
+  role      Role?    @default(USER)
   comicIDs  String[] @db.ObjectId
   bookmarks Comic[]  @relation(fields: [comicIDs], references: [id])
 }
 
 model Comic {
-  id        String   @id @default(uuid()) @map("_id") @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   title     String
-  published Boolean  @default(false)
-  status    Status   @default(READING)
+  published Boolean? @default(false)
+  status    Status?  @default(READING)
   userIDs   String[] @db.ObjectId
   sourceIDs String[] @db.ObjectId
   users     User[]   @relation(fields: [userIDs], references: [id])
@@ -36,12 +36,12 @@ model Comic {
 }
 
 model Source {
-  id          String   @id @default(uuid()) @map("_id") @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   name        String
-  homepageUrl String
-  imageUrl    String
+  homepageUrl String?
+  imageUrl    String?
   comicIDs    String[] @db.ObjectId
   comics      Comic[]  @relation(fields: [comicIDs], references: [id])
 }
