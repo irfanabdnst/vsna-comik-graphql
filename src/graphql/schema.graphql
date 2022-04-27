@@ -2,6 +2,73 @@
 ### Do not make changes to this file directly
 
 
+type Bookmark {
+  comic: Comic
+  comicUrl: String
+  createdAt: DateTime!
+  id: String!
+  name: String!
+  status: Status!
+  tags: [Tag]!
+  updatedAt: DateTime!
+  user: User
+}
+
+type Comic {
+  bookmarks: [Bookmark]!
+  createdAt: DateTime!
+  id: String!
+  name: String!
+  updatedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar DateTime
+
+type Profile {
+  birthDate: DateTime
+  firstName: String
+  lastName: String
+  profileImageUrl: String
+}
+
 type Query {
   ok: Boolean!
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum Status {
+  COMPLETED
+  DROPPED
+  ON_HOLD
+  PLAN_TO_READ
+  READING
+}
+
+type Tag {
+  bookmark: Bookmark
+  createdAt: DateTime!
+  description: String
+  id: String!
+  name: String!
+  updatedAt: DateTime!
+  user: User
+}
+
+type User {
+  bookmarks: [Bookmark]!
+  createdAt: DateTime!
+  email: String!
+  id: String!
+  profile: Profile
+  role: Role!
+  tagsCreated: [Tag]!
+  updatedAt: DateTime!
+  username: String!
 }
