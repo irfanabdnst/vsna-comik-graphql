@@ -1,4 +1,4 @@
-import { enumType, objectType } from 'nexus';
+import { enumType, extendType, nonNull, objectType, stringArg } from 'nexus';
 
 export const Bookmark = objectType({
     name: 'Bookmark',
@@ -41,4 +41,34 @@ export const Bookmark = objectType({
 export const Status = enumType({
     name: 'Status',
     members: ['READING', 'ON_HOLD', 'PLAN_TO_READ', 'COMPLETED', 'DROPPED'],
+});
+
+export const BookmarkQuery = extendType({
+    type: 'Query',
+    definition(t) {
+        t.nonNull.list.field('bookmarks', {
+            type: 'Bookmark',
+            args: {
+                userId: nonNull(stringArg()),
+            },
+            resolve: async (_parent, { userId }, { prisma }) => {
+                return await prisma.bookmark.findMany({
+                    where: { userId },
+                    orderBy: { createdAt: 'asc' },
+                });
+            },
+        });
+
+        t.field('bookmark', {
+            type: 'Bookmark',
+            args: {
+                id: nonNull(stringArg()),
+            },
+            resolve: async (_parent, { id }, { prisma }) => {
+                return await prisma.bookmark.findUnique({
+                    where: { id },
+                });
+            },
+        });
+    },
 });

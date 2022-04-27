@@ -35,7 +35,14 @@ type Profile {
 }
 
 type Query {
-  ok: Boolean!
+  bookmark(id: String!): Bookmark
+  bookmarks(userId: String!): [Bookmark]!
+  comic(id: String!): Comic
+  comics: [Comic]!
+  tag(id: String!): Tag
+  tags(userId: String!): [Tag]!
+  user(id: String!): User
+  users: [User]!
 }
 
 enum Role {
@@ -53,6 +60,7 @@ enum Status {
 
 type Tag {
   bookmark: Bookmark
+  comicTotal: Int
   createdAt: DateTime!
   description: String
   id: String!
