@@ -22,12 +22,35 @@ type Comic {
   updatedAt: DateTime!
 }
 
+input ComicInput {
+  name: String!
+}
+
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
 scalar DateTime
 
+type Mutation {
+  createComic(data: ComicInput!): Comic!
+  createTag(data: TagCreateInput!): Tag!
+  createUser(data: UserCreateInput!): User!
+  deleteComic(id: String!): Comic!
+  deleteTag(id: String!): Tag!
+  deleteUser(id: String!): User!
+  updateComic(data: ComicInput!, id: String!): Comic!
+  updateTag(data: TagUpdateInput!, id: String!): Tag!
+  updateUser(data: UserUpdateInput!, id: String!): User!
+}
+
 type Profile {
+  birthDate: DateTime
+  firstName: String
+  lastName: String
+  profileImageUrl: String
+}
+
+input ProfileInput {
   birthDate: DateTime
   firstName: String
   lastName: String
@@ -69,6 +92,17 @@ type Tag {
   user: User
 }
 
+input TagCreateInput {
+  description: String!
+  name: String!
+  userId: String!
+}
+
+input TagUpdateInput {
+  description: String
+  name: String
+}
+
 type User {
   bookmarks: [Bookmark]!
   createdAt: DateTime!
@@ -79,4 +113,19 @@ type User {
   tagsCreated: [Tag]!
   updatedAt: DateTime!
   username: String!
+}
+
+input UserCreateInput {
+  email: String!
+  password: String!
+  profile: ProfileInput
+  role: Role
+  username: String!
+}
+
+input UserUpdateInput {
+  email: String
+  profile: ProfileInput
+  role: Role
+  username: String
 }

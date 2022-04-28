@@ -1,4 +1,10 @@
-import { extendType, nonNull, objectType, stringArg } from 'nexus';
+import {
+    extendType,
+    inputObjectType,
+    nonNull,
+    objectType,
+    stringArg,
+} from 'nexus';
 
 export const Tag = objectType({
     name: 'Tag',
@@ -34,6 +40,23 @@ export const Tag = objectType({
     },
 });
 
+export const TagCreateInput = inputObjectType({
+    name: 'TagCreateInput',
+    definition(t) {
+        t.nonNull.string('name');
+        t.nonNull.string('description');
+        t.nonNull.string('userId');
+    },
+});
+
+export const TagUpdateInput = inputObjectType({
+    name: 'TagUpdateInput',
+    definition(t) {
+        t.string('name');
+        t.string('description');
+    },
+});
+
 export const TagQuery = extendType({
     type: 'Query',
     definition(t) {
@@ -55,6 +78,44 @@ export const TagQuery = extendType({
             args: { id: nonNull(stringArg()) },
             resolve: async (_parent, { id }, { prisma }) => {
                 return await prisma.tag.findUnique({ where: { id } });
+            },
+        });
+    },
+});
+
+export const TagMutation = extendType({
+    type: 'Mutation',
+    definition(t) {
+        t.nonNull.field('createTag', {
+            type: 'Tag',
+            args: { data: nonNull('TagCreateInput') },
+            resolve: async (_parent, { data }, { prisma }) => {
+                return await prisma.tag.create({ data });
+            },
+        });
+
+        t.nonNull.field('updateTag', {
+            type: 'Tag',
+            args: {
+                data: nonNull('TagUpdateInput'),
+                id: nonNull(stringArg()),
+            },
+            resolve: async (_parent, { id, data }, { prisma }) => {
+                return await prisma.tag.update({
+                    where: { id },
+                    data: {
+                        name: data.name || undefined,
+                        description: data.description || undefined,
+                    },
+                });
+            },
+        });
+
+        t.nonNull.field('deleteTag', {
+            type: 'Tag',
+            args: { id: nonNull(stringArg()) },
+            resolve: async (_parent, { id }, { prisma }) => {
+                return await prisma.tag.delete({ where: { id } });
             },
         });
     },

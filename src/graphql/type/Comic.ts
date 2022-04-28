@@ -1,4 +1,10 @@
-import { extendType, nonNull, objectType, stringArg } from 'nexus';
+import {
+    extendType,
+    inputObjectType,
+    nonNull,
+    objectType,
+    stringArg,
+} from 'nexus';
 
 export const Comic = objectType({
     name: 'Comic',
@@ -20,6 +26,13 @@ export const Comic = objectType({
     },
 });
 
+export const ComicInput = inputObjectType({
+    name: 'ComicInput',
+    definition(t) {
+        t.nonNull.string('name');
+    },
+});
+
 export const ComicQuery = extendType({
     type: 'Query',
     definition(t) {
@@ -37,6 +50,38 @@ export const ComicQuery = extendType({
             args: { id: nonNull(stringArg()) },
             resolve: async (_parent, { id }, { prisma }) => {
                 return await prisma.comic.findUnique({ where: { id } });
+            },
+        });
+    },
+});
+
+export const ComicMutation = extendType({
+    type: 'Mutation',
+    definition(t) {
+        t.nonNull.field('createComic', {
+            type: 'Comic',
+            args: { data: nonNull('ComicInput') },
+            resolve: async (_parent, { data }, { prisma }) => {
+                return await prisma.comic.create({ data });
+            },
+        });
+
+        t.nonNull.field('updateComic', {
+            type: 'Comic',
+            args: {
+                id: nonNull(stringArg()),
+                data: nonNull('ComicInput'),
+            },
+            resolve: async (_parent, { id, data }, { prisma }) => {
+                return await prisma.comic.update({ where: { id }, data });
+            },
+        });
+
+        t.nonNull.field('deleteComic', {
+            type: 'Comic',
+            args: { id: nonNull(stringArg()) },
+            resolve: async (_parent, { id }, { prisma }) => {
+                return await prisma.comic.delete({ where: { id } });
             },
         });
     },
