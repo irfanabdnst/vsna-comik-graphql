@@ -1,0 +1,26 @@
+{
+    "_id": {
+        "$oid": "626a0dd015b08fb3dc7bd53e"
+    },
+    "email": "vesnanst@gmail.com",
+    "username": "vesnanst",
+    "password": "123456",
+    "profile": {
+        "firstName": "Vesna",
+        "lastname": "Nasution"
+    },
+    "bookmarks": [
+        {
+            "_id": {
+                "$oid": "626a0eb015b08fb3dc7bd53f"
+            },
+            "name": "One Piece"
+        },
+        {
+            "_id": {
+                "$oid": "626a0efa15b08fb3dc7bd540"
+            },
+            "name": "Naruto"
+        }
+    ]
+}

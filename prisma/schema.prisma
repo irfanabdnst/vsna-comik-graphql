@@ -1,81 +1,27 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  email     String   @unique
-  username  String   @unique
+type Bookmark {
+  id   String? @default(cuid()) @map("_id") @db.ObjectId
+  name String?
+}
+
+type Profile {
+  firstName String?
+  lastName  String?
+}
+
+model user {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  email     String
+  username  String
   password  String
-  role      Role     @default(USER)
-  bookmarks Comic[]
-}
-
-model Comic {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  title     String
-  published Boolean   @default(false)
-  status    Status    @default(READING)
-  source    Source[]
-  tags      Tag[]
-  chapters  Chapter[]
-  users     User[]
-}
-
-model Chapter {
-  id            Int       @id @default(autoincrement())
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  chapterNumber String
-  title         String?
-  releaseDate   DateTime?
-  published     Boolean   @default(false)
-  comicId       Int
-  comic         Comic     @relation(fields: [comicId], references: [id])
-  sourceId      Int
-  source        Source    @relation(fields: [sourceId], references: [id])
-}
-
-model Source {
-  id          Int       @id @default(autoincrement())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  name        String
-  homepageUrl String
-  imageUrl    String
-  comic       Comic[]
-  chapter     Chapter[]
-}
-
-model Tag {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String   @unique
-  comics    Comic[]
-}
-
-enum Role {
-  ADMIN
-  USER
-}
-
-enum Status {
-  READING
-  ON_HOLD
-  PLAN_TO_READ
-  COMPLETED
-  DROPPED
+  profile   Profile?
+  bookmarks Bookmark[]
 }
